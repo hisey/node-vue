@@ -119,7 +119,6 @@ module.exports = {
         let user = req.session.login;
         if (user) {
             res.json({ code: 200, msg: '自动登录', user: user });
-
         } else {
             res.json({ code: 400, msg: 'not found' });
         }

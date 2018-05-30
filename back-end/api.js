@@ -1,4 +1,4 @@
-let path = '/api';
+let path = '/api/admin';
 
 module.exports = {
     // goods
@@ -14,8 +14,8 @@ module.exports = {
     userDelete: path + '/user/delete',
     userAdd: path + '/user/add',
     userDeleteMulti: path + '/user/delete-multi',
-    userLogin: path + '/user/login',
     userLogout: path + '/user/logout',
-    userAutoLogin: path + '/user/auto-login',
     userChangeRole: path + '/user/change-role',
+    userLogin: '/api/user/login',
+    userAutoLogin: '/api/user/auto-login',
 };
