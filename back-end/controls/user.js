@@ -86,7 +86,7 @@ module.exports = {
         let pass = req.body.pass;
 
         func.connPool('SELECT * from user where user_name = ?', [user_name], (err, rows) => {
-
+            // console.log(rows)
             if (!rows.length) {
                 res.json({ code: 400, msg: '用户名不存在' });
                 return;

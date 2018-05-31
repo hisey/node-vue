@@ -5,7 +5,7 @@ let pool = mysql.createPool(db);
 module.exports = {
     connPool (sql, val, cb) {
         pool.getConnection((err, conn) => {
-            // console.log("连接成功");
+            console.log("连接成功");
             let q = conn.query(sql, val, (err, rows) => {
               
                 if (err) {

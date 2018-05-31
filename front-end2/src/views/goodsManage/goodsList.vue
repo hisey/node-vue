@@ -6,9 +6,9 @@
           {{scope.$index}}
         </template>
       </el-table-column>
-      <el-table-column label="名称">
+      <el-table-column label="名称" align="center">
         <template slot-scope="scope">
-          {{scope.row.goodsList}}
+          {{scope.row.name}}
         </template>
       </el-table-column>
       <el-table-column label="商品分类" width="110" align="center">
@@ -18,7 +18,7 @@
       </el-table-column>
       <el-table-column label="价格" width="110" align="center">
         <template slot-scope="scope">
-          {{scope.row.price}}
+          {{scope.row.price}}元
         </template>
       </el-table-column>
       <el-table-column label="图片" width="110" align="center">
@@ -33,13 +33,12 @@
       </el-table-column>
       <el-table-column class-name="status-col" label="是否上架" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+          <el-tag :type="scope.row.inventory | statusFilter">{{scope.row.inventory | statusToStr}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
+      <el-table-column class-name="status-col" label="是否热推" width="110" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span>{{scope.row.display_time}}</span>
+          <el-tag :type="scope.row.onsale | statusFilter">{{scope.row.onsale | statusToStr}}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -47,35 +46,45 @@
 </template>
 
 <script>
-// import { getList } from '@/api/table'
+import { getGoodsList } from '@/api/goods'
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true
-    }
+    };
   },
   filters: {
     statusFilter(status) {
       const statusMap = {
-        1: 'success',
-        0: 'gray',
-      }
-      return statusMap[status]
+        1: "success",
+        0: "gray"
+      };
+      return statusMap[status];
+    },
+    statusToStr(status) {
+      const statusMap = {
+        1: "是",
+        0: "否"
+      };
+      return statusMap[status];
     }
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
+    async fetchData() {
+      // console.log("sadf");
+      
+      this.listLoading = true;
+      let data=await getGoodsList()
       // getList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.listLoading = false
+        this.list = data.goods
+        this.listLoading = false
       // })
     }
   }
-}
+};
 </script>

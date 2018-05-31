@@ -22,8 +22,8 @@
         </el-button>
       </el-form-item>
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
+        <span style="margin-right:20px;">username: root</span>
+        <span> password: root</span>
       </div>
     </el-form>
   </div>

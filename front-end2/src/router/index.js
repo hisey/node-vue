@@ -51,27 +51,13 @@ export const constantRouterMap = [
         meta: { title: '商品列表', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'addGoods',
+        name: 'addGoods',
+        component: () => import('@/views/goodsManage/addGoods'),
+        meta: { title: '新增商品', icon: 'tree' }
       }
     ]
   },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -4,7 +4,7 @@ let path = require('path');
 let session = require('express-session');
 let router = require('./routes/router');
 let cors = require('cors');
-let port = process.env.PORT || 9999;
+let port = 9999;
 let app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 //配置跨域
 var allowCrossDomain = function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:9528');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4865');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true');
