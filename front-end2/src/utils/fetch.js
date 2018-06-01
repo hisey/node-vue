@@ -78,7 +78,13 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(err.response)
 })
 
-axios.defaults.baseURL = process.env.BASE_API
+let basicUrl = ""
+if (process.env.NODE_ENV == "development") {
+  basicUrl = "http://localhost:9999"
+} else {
+  basicUrl = "http://193.112.202.42:9999"
+}
+axios.defaults.baseURL = basicUrl
 //设置默认请求头
 // axios.defaults.headers = {
 //     'X-Requested-With': 'XMLHttpRequest'

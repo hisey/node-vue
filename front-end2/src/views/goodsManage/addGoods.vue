@@ -53,7 +53,7 @@
 </template>
 
 <script>
-
+import { login } from "@/api/goods";
     export default {
         name: 'form',
 
@@ -79,12 +79,12 @@
                     return;
                 }
 
-                this.func.ajaxPost(this.api.goodsAdd, this.form, res => {
-                    if (res.data.code === 200) {
-                        this.$message.success('操作成功');
-                        this.$router.push('/admin/goods-list');
-                    }
-                });
+                // this.func.ajaxPost(this.api.goodsAdd, this.form, res => {
+                //     if (res.data.code === 200) {
+                //         this.$message.success('操作成功');
+                //         this.$router.push('/admin/goods-list');
+                //     }
+                // });
             },
 
             onCancel () {

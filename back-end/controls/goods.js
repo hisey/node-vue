@@ -6,87 +6,92 @@ let path = require('path');
 function formatData(rows) {
     return rows.map(row => {
         let date = moment(row.create_time).format('YYYY-MM-DD');
-        return Object.assign({}, row, {create_time: date});
+        return Object.assign({}, row, { create_time: date });
     });
 }
 
 
 module.exports = {
     // 获取商品列表
-    fetchAll (req, res) {
+    fetchAll(req, res) {
         func.connPool(sql.queryAll, 'goods', (err, rows) => {
             rows = formatData(rows);
-            res.json({code: 200, msg: 'ok', goods: rows});
+            res.json({ code: 200, msg: 'ok', goods: rows });
         });
     },
 
     // 获取商品详情
-    fetchById (req, res) {
+    fetchById(req, res) {
         let id = req.body.id;
 
         func.connPool(sql.queryById, ['goods', id], (err, rows) => {
             rows = formatData(rows);
-            res.json({code: 200, msg: 'ok', goods: rows[0]});
+            res.json({ code: 200, msg: 'ok', goods: rows[0] });
         });
 
     },
 
     // 添加|更新 商品
-    addOne (req, res) {
+    addOne(req, res) {
         let id = req.body.id;
         console.log(id);
-        let name = req.body.name;
-        let price = req.body.price;
-        let query, arr;
+        let body = req.body;
+        // let price = req.body.price;
+        let query, arr = [], str;
+        // var obj = { '0': 'a', '1': 'b', '2': 'c' };
+
+        Object.keys(body).forEach(function (key) {
+            // console.log(key, body[key]);
+            arr.push(body[key])
+        });
 
         if (id) {
             // 更新
-            query = 'UPDATE goods SET name=?, price=? WHERE id=?';
-            arr = [name, price, id];
+            query = 'UPDATE goods SET name=?, price=?,inventory=?,category=?,imgs=?,onsale=?,shelf=? WHERE id=?';
+            arr = arr.push(id);
         } else {
             // 新增
-            query = 'INSERT INTO goods(name, price) VALUES(?,?)';
-            arr = [name, price];
+            query = 'INSERT INTO goods(name, price,inventory,category,imgs,onsale,shelf) VALUES(?,?,?,?,?,?,?)';
+            // arr = [name, price, inventory, category, imgs, onsale, shelf];
         }
 
         func.connPool(query, arr, (err, rows) => {
-            res.send({code: 200, msg: 'done'});
-
+            res.send({ code: 200, msg: 'done' });
         });
 
     },
 
 
     // 删除商品
-    deleteOne (req, res) {
+    deleteOne(req, res) {
 
         let id = req.body.id;
 
         func.connPool(sql.del, ['goods', id], (err, rows) => {
-            res.send({code: 200, msg: 'done'});
+            res.send({ code: 200, msg: 'done' });
 
         });
 
     },
 
     // 批量删除
-    deleteMulti (req, res) {
+    deleteMulti(req, res) {
         let id = req.body.id;
 
         func.connPool('DELETE FROM goods WHERE id IN ?', [[id]], (err, rows) => {
-            res.send({code: 200, msg: 'done'});
+            res.send({ code: 200, msg: 'done' });
 
         });
 
     },
 
-    uploadGoodsImg (req, res) {
+    uploadGoodsImg(req, res) {
         let absolutePath = path.resolve(__dirname, req.file.path);
-        let a  = 2;
+        let a = 2;
 
         func.connPool('UPDATE goods SET imgs = ? WHERE id = ?', [absolutePath, 60], (err, rows) => {
             console.log(a);
-            res.send({code: 200, msg: 'done', url: absolutePath});
+            res.send({ code: 200, msg: 'done', url: absolutePath });
         }, res);
     },
 };
