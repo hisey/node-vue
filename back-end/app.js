@@ -40,12 +40,12 @@ app.use(function (req, res, next) {
     if (url.indexOf("admin") > -1) {
         var user = req.session.login;
         // console.log(req.session);
-        if (user) {
+        // if (user) {
             next();
-        }
-        else {
-            return res.json({ code: 301, msg: '用户未登陆' });
-        }
+        // }
+        // else {
+            // return res.json({ code: 301, msg: '用户未登陆' });
+        // }
     }
     else {
         next();

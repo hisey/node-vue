@@ -1,24 +1,24 @@
-let forStr = (str) => {
-    let arr1 = [];
-    let arr2 = str.split(",")
-    for (let i = 0; i < arr2.length; i++) {
-        arr1.push(arr2[i] + '=?')
-    }
-    str = arr1.join(',')
-    return str
-}
-let forPro = (str) => {
-    let str2 = '';
-    str = str.join(',')
-    for (let i = 0; i < str.length; i++) {
-        str2 = str2 + '?'
-    }
-    return str2
-}
 module.exports = {
     queryAll: 'SELECT * FROM ??',
     queryById: 'SELECT * FROM ?? WHERE id=?',
     del: 'DELETE FROM ?? WHERE id=?',
-    updata: (table, str, id) => 'UPDATE' + table + 'SET ' + forStr(str) + ' WHERE ' + id + '=?',
-    add: (table, str) => 'INSERT INTO ' + table + '(' + str + ') VALUES(' + forPro(str) + ')'
+    addOrUpdata: (obj, table) => {
+        let id = obj.id;
+        let query, arr1 = [], arr2 = [], arr3 = [];
+        Object.keys(obj).forEach(function (key) {
+            if (key != "id") {
+                arr1.push(`${key}=?`)
+                arr2.push(key)
+                arr3.push('?')
+            }
+        });
+        if (id) {
+            // 更新
+            query = `UPDATE ${table} SET ${arr1.join(',')} , update_time=? WHERE id=?`;
+        } else {
+            // 新增
+            query = `INSERT INTO ${table} (${arr2.join(',')},create_time) VALUES(${arr3.join(',')} ,?)`;
+        }
+        return query
+    }
 };
