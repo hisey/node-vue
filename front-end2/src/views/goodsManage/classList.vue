@@ -11,19 +11,9 @@
           {{scope.row.name}}
         </template>
       </el-table-column>
-      <el-table-column label="商品分类" width="110" align="center">
+      <el-table-column label="等级" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.category}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="价格" width="110" align="center">
-        <template slot-scope="scope">
-          {{scope.row.price}}元
-        </template>
-      </el-table-column>
-      <el-table-column label="图片" width="110" align="center">
-        <template slot-scope="scope">
-           <img :src="scope.row.imgs" alt="">
+          <span>{{scope.row.level}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="210" align="center">
@@ -36,33 +26,19 @@
           <el-tag :type="scope.row.shelf | statusFilter">{{scope.row.shelf | statusToStr}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否热推" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.onsale | statusFilter">{{scope.row.onsale | statusToStr}}</el-tag>
-        </template>
-      </el-table-column>
     </el-table>
-     <el-pagination style="margin-top:20px;"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      :page-size="showCount"
-      layout="total, prev, pager, next,jumper"
-      :total="total">
-      </el-pagination>
   </div>
 </template>
 
 <script>
-import { getGoodsList } from "@/api/goods";
+import { goodsCategory } from "@/api/goods";
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true,
-      showCount: 10,
-      total: 1,
-      currentPage: 1
+      showCount: 10
     };
   },
   filters: {
@@ -82,24 +58,15 @@ export default {
     }
   },
   created() {
-    this.fetchData("1");
+    this.fetchData(1);
   },
   methods: {
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.fetchData();
-    },
-    async fetchData() {
+    async fetchData(curentPage) {
       this.listLoading = true;
-      let data = await getGoodsList({
-        curentPage: this.currentPage,
-        showCount: this.showCount
-      });
-      data = data.data;   
+      let data = await goodsCategory({ curentPage, showCount: this.showCount });
+      data = data.data;
       this.list = data.arr;
       this.listLoading = false;
-      this.total = data.totalCount;
-      this.pageSize = data.totalPages;
     }
   }
 };

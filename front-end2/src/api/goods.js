@@ -17,7 +17,9 @@ import fetch from '../utils/fetch'
 //   })
 // }
 export const getGoodsList= fetch.get('api/admin/goods/list')
-export const addGoods= fetch.post('api/admin//goods/add')
+export const addGoods= fetch.post('api/admin/goods/addGoods')
+export const addGoodsCategory= fetch.post('api/admin/goods/addGoodsCategory')
+export const goodsCategory= fetch.get('api/admin/goods/goodsCategory')
 
 // export function getInfo(token) {
 //   return request({

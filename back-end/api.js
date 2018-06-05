@@ -3,9 +3,11 @@ let path = '/api/admin';
 module.exports = {
     // goods
     goodsList: path + '/goods/list',
+    goodsCategory: path + '/goods/goodsCategory',
     goodsDetail: path + '/goods/detail',
     goodsDelete: path + '/goods/delete',
-    goodsAdd: path + '/goods/add',
+    goodsAdd: path + '/goods/addGoods',
+    addGoodsCategory: path + '/goods/addGoodsCategory',
     goodsDeleteMulti: path + '/goods/delete-multi',
     goodsUploadImg: path + '/goods/upload-img',
 

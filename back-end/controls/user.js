@@ -1,113 +1,93 @@
+/**
+* @author hisey
+* @version 1.0
+*/
+// 用户controls
+
 let sql = require('../sql/sql');
 let moment = require('moment');
 let bcrypt = require('bcryptjs');
 let func = require('../sql/func');
-
-function formatData(rows) {
-    return rows.map(row => {
-        let date = moment(row.create_time).format('YYYY-MM-DD');
-        let obj = {};
-
-        switch (row.role) {
-            case 1:
-                obj.role = '普通用户';
-                break;
-            case 10:
-                obj.role = '管理员';
-                break;
-            case 100:
-                obj.role = '超级管理员';
-        }
-
-        delete row.password;
-
-        return Object.assign({}, row, { create_time: date }, obj);
-    });
-}
+let paging = require('../utils/paging');
 
 module.exports = {
 
-    fetchAll(req, res) {
-        func.connPool(sql.queryAll, 'user', (err, rows) => {
-            rows = formatData(rows);
-            res.json({ code: 200, msg: 'ok', users: rows });
-        });
-
+    async fetchAll(req, res) {
+        let curentPage = req.query.curentPage;
+        let showCount = req.query.showCount
+        let data = await paging(res, 'user', curentPage, showCount)
+        if (data) {
+            res.json({ code: 200, msg: 'ok', data });
+        } else {
+            res.json({ code: -1, msg: '获取数据失败' });
+        }
     },
 
     // 添加用户
-    addOne(req, res) {
+     addOne(req, res) {
         let name = req.body.name;
         let pass = req.body.pass;
         let role = req.body.role;
         let query = 'INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)';
 
         // 密码加盐
-        bcrypt.hash(pass, 10, (err, hash) => {
+        bcrypt.hash(pass, 10, async (err, hash) => {
             if (err) console.log(err);
-
             pass = hash;
-
             let arr = [name, pass, role];
-
-            func.connPool(query, arr, (err, rows) => {
-                res.json({ code: 200, msg: 'done' });
-            });
-
+            let data = await func.connPool(query, arr)
+            res.json({ code: 200, msg: 'done' });
         });
 
     },
 
 
     // 删除用户
-    deleteOne(req, res) {
+    async deleteOne(req, res) {
 
         let id = req.body.id;
 
-        func.connPool(sql.del, ['user', id], (err, rows) => {
-            res.json({ code: 200, msg: 'done' });
-        });
+        let data = await func.connPool(sql.del, ['user', id])
+        res.json({ code: 200, msg: 'done' });
+        // });
 
     },
 
     // 批量删除
-    deleteMulti(req, res) {
+    async deleteMulti(req, res) {
         let id = req.body.id;
-
-        func.connPool('DELETE FROM user WHERE id IN ?', [[id]], (err, rows) => {
-            res.json({ code: 200, msg: 'done' });
-        });
-
+        let data = await func.connPool('DELETE FROM user WHERE id IN ?', [[id]])
+        res.json({ code: 200, msg: 'done' });
     },
 
     // 登录
-    login(req, res) {
+    async login(req, res) {
         let user_name = req.body.user_name;
         let pass = req.body.pass;
-        func.connPool('SELECT * from user where user_name = ?', [user_name], (err, rows) => {
-            if (!rows.length) {
-                res.json({ code: 400, msg: '用户名不存在' });
-                return;
+        let data = await func.connPool('SELECT * from user where user_name = ?', [user_name])
+        if (!data.length) {
+            res.json({ code: 400, msg: '用户名不存在' });
+            return;
+        }
+
+        let password = data[0].password;
+        bcrypt.compare(pass, password, (err, sure) => {
+            if (sure) {
+                let user = {
+                    user_id: data[0].user_id,
+                    user_name: data[0].user_name,
+                    role: data[0].role,
+                };
+
+                req.session.login = user;
+
+                res.json({ code: 200, msg: '登录成功', user: user });
+            } else {
+                res.json({ code: 400, msg: '密码错误' });
             }
-
-            let password = rows[0].password;
-            bcrypt.compare(pass, password, (err, sure) => {
-                if (sure) {
-                    let user = {
-                        user_id: rows[0].user_id,
-                        user_name: rows[0].user_name,
-                        role: rows[0].role,
-                    };
-
-                    req.session.login = user;
-
-                    res.json({ code: 200, msg: '登录成功', user: user });
-                } else {
-                    res.json({ code: 400, msg: '密码错误' });
-                }
-            });
-
         });
+
+
 
     },
 
@@ -140,7 +120,7 @@ module.exports = {
     },
 
     // 权限变更
-    changeRole(req, res) {
+    async changeRole(req, res) {
         let role = req.session.login.role;
         let change_role = req.body.change_role;
 
@@ -150,13 +130,11 @@ module.exports = {
         }
 
         let user_id = req.body.id;
-
-        func.connPool('UPDATE user SET role= ? WHERE id = ?', [change_role, user_id], (err, rows) => {
-            console.log(rows);
-            if (rows.affectedRows) {
-                res.json({ code: 200, msg: 'done' });
-            }
-        });
+        let data = await func.connPool('UPDATE user SET role= ? WHERE id = ?', [change_role, user_id])
+        if (data.affectedRows) {
+            res.json({ code: 200, msg: 'done' });
+        }
+        // });
 
     },
 

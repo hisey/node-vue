@@ -9,9 +9,11 @@ let router = express.Router();
 
 // goods
 router.get(api.goodsList, goods.fetchAll);
+router.get(api.goodsCategory, goods.fetchCategory);
 
 router.post(api.goodsDetail, goods.fetchById);
-router.post(api.goodsAdd, goods.addOne);
+router.post(api.goodsAdd, goods.addGoods);
+router.post(api.addGoodsCategory, goods.addGoodsCategory);
 router.post(api.goodsDelete, goods.deleteOne);
 router.post(api.goodsDeleteMulti, goods.deleteMulti);
 router.post(api.goodsUploadImg, upload.single('avatar'),goods.uploadGoodsImg); // 图片上传
