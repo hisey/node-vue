@@ -8,6 +8,7 @@ module.exports = {
             pool.getConnection((err, conn) => {
                 // console.log("连接成功");
                 let q = conn.query(sql, val, (err, rows) => {
+                    // console.log(rows);
                     if ( err ) {
                         reject( err )
                         console.log("查询失败" + err);

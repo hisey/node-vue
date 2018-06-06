@@ -2,7 +2,7 @@
 * @author hisey
 * @version 1.0
 * @param {[object]} res  [response对象]
-* @param {[string]} table [表名]
+* @param {[object]} sql [sql语句：包含查询总数与查询列表内容，格式为：{count:**,list:**}]
 * @param {[string]} curentPage [当前页]
 * @param {[string]} showCount  [显示个数]
 */

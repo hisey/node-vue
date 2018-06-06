@@ -5,13 +5,12 @@
 // 用户controls
 
 let sql = require('../sql/sql');
-let moment = require('moment');
+// let moment = require('moment');
 let bcrypt = require('bcryptjs');
 let func = require('../sql/func');
 let paging = require('../utils/paging');
 
 module.exports = {
-
     async fetchAll(req, res) {
         let curentPage = req.query.curentPage;
         let showCount = req.query.showCount
@@ -22,7 +21,6 @@ module.exports = {
             res.json({ code: -1, msg: '获取数据失败' });
         }
     },
-
     // 添加用户
      addOne(req, res) {
         let name = req.body.name;

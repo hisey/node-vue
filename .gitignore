@@ -7,3 +7,5 @@ yarn-error.log
 ./front-end/sftpConfig.js
 ./front-end/sftpConfig.js
 back-end/sftpConfig.js
+front-end2/sftpConfig.js
+back-end/uploadFiles/
