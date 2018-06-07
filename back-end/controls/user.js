@@ -13,20 +13,34 @@ let paging = require('../utils/paging');
 module.exports = {
     async fetchAll(req, res) {
         let curentPage = req.query.curentPage;
-        let showCount = req.query.showCount
-        let data = await paging(res, 'user', curentPage, showCount)
+        let showCount = req.query.showCount;
+        // console.log(req.query);
+        if (curentPage == '' || curentPage == null || curentPage == undefined) {
+            res.json({ code: 102, msg: '请传入当前页码' });
+            return;
+        }
+        if (showCount == '' || showCount == null || showCount == undefined) {
+            showCount = "10";
+        }
+        let start = (curentPage - 1) * parseInt(showCount);
+        let sql = {
+            count:"SELECT COUNT(*) FROM adminUser",
+            list:`SELECT * FROM adminUser LIMIT ${start},${showCount}`
+        }
+        console.log(sql.list);
+        let data = await paging(res, sql, curentPage, showCount)
         if (data) {
-            res.json({ code: 200, msg: 'ok', data });
+            res.json({ code: 200, msg: 'done', data });
         } else {
             res.json({ code: -1, msg: '获取数据失败' });
         }
     },
     // 添加用户
-     addOne(req, res) {
+    addOne(req, res) {
         let name = req.body.name;
         let pass = req.body.pass;
         let role = req.body.role;
-        let query = 'INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)';
+        let query = 'INSERT INTO adminUser(user_name, password, role) VALUES(?, ?, ?)';
 
         // 密码加盐
         bcrypt.hash(pass, 10, async (err, hash) => {
@@ -45,7 +59,7 @@ module.exports = {
 
         let id = req.body.id;
 
-        let data = await func.connPool(sql.del, ['user', id])
+        let data = await func.connPool(sql.del, ['adminUser', id])
         res.json({ code: 200, msg: 'done' });
         // });
 
@@ -54,7 +68,7 @@ module.exports = {
     // 批量删除
     async deleteMulti(req, res) {
         let id = req.body.id;
-        let data = await func.connPool('DELETE FROM user WHERE id IN ?', [[id]])
+        let data = await func.connPool('DELETE FROM adminUser WHERE id IN ?', [[id]])
         res.json({ code: 200, msg: 'done' });
     },
 
@@ -62,7 +76,7 @@ module.exports = {
     async login(req, res) {
         let user_name = req.body.user_name;
         let pass = req.body.pass;
-        let data = await func.connPool('SELECT * from user where user_name = ?', [user_name])
+        let data = await func.connPool('SELECT * from adminUser where user_name = ?', [user_name])
         if (!data.length) {
             res.json({ code: 400, msg: '用户名不存在' });
             return;
@@ -128,7 +142,7 @@ module.exports = {
         }
 
         let user_id = req.body.id;
-        let data = await func.connPool('UPDATE user SET role= ? WHERE id = ?', [change_role, user_id])
+        let data = await func.connPool('UPDATE adminUser SET role= ? WHERE id = ?', [change_role, user_id])
         if (data.affectedRows) {
             res.json({ code: 200, msg: 'done' });
         }

@@ -18,19 +18,21 @@ router.post(api.addGoodsCategory, goods.addGoodsCategory);
 router.post(api.goodsDelete, goods.deleteGoods);
 router.post(api.goodsCategoryDelete, goods.deleteCategory);
 router.post(api.goodsDeleteMulti, goods.deleteMulti);
+router.post(api.goodsShelf, goods.shelfGoods);
+router.post(api.goodsShelfCategory, goods.shelfCategory);
 // router.post(api.goodsUploadImg, upload.single('avatar'), goods.uploadGoodsImg); // 图片上传
 
 
 
-// user
-router.get(api.userList, user.fetchAll);
-router.post(api.userLogout, user.logout);
-router.post(api.userAutoLogin, user.autoLogin); // 自动登录
+// adminUser
+router.get(api.adminUserList, user.fetchAll);
+router.post(api.adminUserLogout, user.logout);
+router.post(api.adminUserAutoLogin, user.autoLogin); // 自动登录
 
-router.post(api.userAdd, user.addOne);
-router.post(api.userDelete, user.deleteOne);
-router.post(api.userDeleteMulti, user.deleteMulti);
-router.post(api.userLogin, user.login); // 登录
+router.post(api.adminUserAdd, user.addOne);
+router.post(api.adminUserDelete, user.deleteOne);
+router.post(api.adminUserDeleteMulti, user.deleteMulti);
+router.post(api.adminUserLogin, user.login); // 登录
 router.post(api.userChangeRole, user.controlVisit, user.changeRole); // 更改权限
 
 /* 上传*/

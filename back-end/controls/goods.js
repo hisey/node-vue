@@ -10,14 +10,22 @@ module.exports = {
     // 获取商品列表
     async fetchList(req, res) {
         let curentPage = req.query.curentPage;
-        let showCount = req.query.showCount
+        let showCount = req.query.showCount;
+        if (curentPage == '' || curentPage == null || curentPage == undefined) {
+            res.json({ code: 102, msg: '请传入当前页码' });
+            return;
+        }
+        if (showCount == '' || showCount == null || showCount == undefined) {
+            showCount = "10";
+        }
+        let start = (curentPage - 1) * parseInt(showCount);
         let sql = {
             count: 'SELECT COUNT(*) FROM goods',
-            list: `SELECT * FROM goods LIMIT ${curentPage},${showCount}`
+            list: `SELECT * FROM goods LIMIT ${start},${showCount}`
         }
         let data = await paging(res, sql, curentPage, showCount)
         if (data) {
-            res.json({ code: 200, msg: 'ok', data });
+            res.json({ code: 200, msg: 'done', data });
         } else {
             res.json({ code: -1, msg: '获取数据失败' });
         }
@@ -34,7 +42,7 @@ module.exports = {
         }
         let data = await func.connPool(sql)
         if (data) {
-            res.json({ code: 200, msg: 'ok', data });
+            res.json({ code: 200, msg: 'done', data });
         } else {
             res.json({ code: -1, msg: '获取数据失败' });
         }
@@ -50,7 +58,7 @@ module.exports = {
         data.update_time = new Date(data.update_time).toLocaleString()
         console.log(sql.queryById)
         console.log(data)
-        res.json({ code: 200, msg: 'ok', goods: data });
+        res.json({ code: 200, msg: 'done', goods: data });
     },
 
     // 添加|更新 商品
@@ -59,8 +67,13 @@ module.exports = {
     },
 
     // 添加|更新 商品分类
-    addGoodsCategory(req, res) {
+    async addGoodsCategory(req, res) {
         addOne(req, res, "goodsCategory")
+        let categoryName = req.body.name;
+        let categoryId = req.body.id;
+        let sql = `UPDATE goods SET category_name=${categoryName} WHERE category_id=${categoryId}`
+        let data = await func.connPool(sql)
+        res.send({ code: 200, msg: 'done' });        
     },
 
     // 删除商品
@@ -73,21 +86,32 @@ module.exports = {
     // 删除商品分类
     async deleteCategory(req, res) {
         let id = req.body.id;
-        let data = await func.connPool(sql.del, ['goodsCategory', id])
+        let data1 = await func.connPool(sql.del, ['goodsCategory', id])
+        let data2 = await func.connPool(`DELETE FROM goods WHERE category_id = ${id}`)
         res.send({ code: 200, msg: 'done' });
     },
 
     // 批量删除
     async deleteMulti(req, res) {
         let id = req.body.id;
-        let data = await func.connPool('DELETE FROM goods WHERE id IN ?', [[id]])
+        let data = await func.connPool(`DELETE FROM goods WHERE id IN (${id})`)
         res.send({ code: 200, msg: 'done' });
     },
+
 
     //上架与下架商品|分类
     async shelfGoods(req, res) {
         let id = req.body.id;
-        let shelf
-        let data = await func.connPool()
+        let sql = `UPDATE goods SET shelf = ${req.body.shelf} WHERE id = ${id}`
+        let data = await func.connPool(sql)
+        res.send({ code: 200, msg: 'done' });
+    },
+    async shelfCategory(req, res) {
+        let id = req.body.id;
+        let sql1 = `UPDATE goodsCategory SET shelf = ${req.body.shelf} WHERE id = ${id}`
+        let sql2 = `UPDATE good2 SET shelf = ${req.body.shelf} WHERE category_id = ${id}`
+        let data1 = await func.connPool(sql1)
+        let data2 = await func.connPool(sql2)
+        res.send({ code: 200, msg: 'done' });
     }
 };

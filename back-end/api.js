@@ -10,17 +10,19 @@ module.exports = {
     goodsAdd: path + '/goods/addGoods',                            //新增|更新商品
     addGoodsCategory: path + '/goods/addCategory',                 //新增|更新分类
     goodsDeleteMulti: path + '/goods/deleteMulti',                 //批量删除商品
+    goodsShelf: path + '/goods/shelf',                             //下架商品
+    goodsShelfCategory: path + '/goods/shelfCategory',             //下架分类
     // goodsUploadImg: path + '/goods/upload-img',
 
     // user
-    userList: path + '/user/getList',                               //列表
-    userDelete: path + '/user/delete',                              //删除
-    userAdd: path + '/user/add',                                    //新增|更新
-    userDeleteMulti: path + '/user/deleteMulti',                    //批量删除
-    userLogout: path + '/user/logout',                              //注销
+    adminUserList: path + '/user/getList',                               //列表
+    adminUserDelete: path + '/user/delete',                              //删除
+    adminUserAdd: path + '/user/add',                                    //新增|更新
+    adminUserDeleteMulti: path + '/user/deleteMulti',                    //批量删除
+    adminUserLogout: path + '/user/logout',                              //注销
     userChangeRole: path + '/user/changeRole',                      //改变角色
-    userLogin: path + '/user/login',                            //登陆
-    userAutoLogin: path + '/user/autoLogin',                    //自动登陆
+    adminUserLogin: path + '/user/login',                                //登陆
+    adminUserAutoLogin: path + '/user/autoLogin',                        //自动登陆
 
     //file
     uploading: '/file/uploading',                                   //文件上传

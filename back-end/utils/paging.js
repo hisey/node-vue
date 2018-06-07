@@ -9,15 +9,6 @@
 let func = require('../sql/func'); 
 let paging = async (res, sql, curentPage, showCount) => {
     let list = [];
-    // let arr=[];
-    if (curentPage == '' || curentPage == null || curentPage == undefined) {
-        res.json({ code: 102, msg: '请传入当前页码' });
-        return;
-    }
-    if (showCount == '' || showCount == null || showCount == undefined) {
-        showCount = "10";
-    }
-    let start = (curentPage - 1) * parseInt(showCount);
     // let totalCount = await func.connPool(`SELECT COUNT(*) FROM ${table}`, [])
     let totalCount = await func.connPool(sql.count, [])
     totalCount = totalCount[0]['COUNT(*)'];
@@ -28,8 +19,10 @@ let paging = async (res, sql, curentPage, showCount) => {
         totalPages = parseInt(pageStr.split('.')[0]) + 1;
     }
     if (curentPage <= totalPages) {
+        // console.log(sql.list);
+        
         // list = await func.connPool(`SELECT * FROM ${table} LIMIT ${start},${showCount}`, [])
-        list = await func.connPool(sql.list, [])
+        list = await func.connPool(sql.list)
     }
     var arr = list.filter(function (item) {
         item.create_time = new Date(item.create_time).toLocaleString()
