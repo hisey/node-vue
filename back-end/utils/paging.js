@@ -19,7 +19,7 @@ let paging = async (res, sql, curentPage, showCount) => {
         totalPages = parseInt(pageStr.split('.')[0]) + 1;
     }
     if (curentPage <= totalPages) {
-        // console.log(sql.list);
+        // //console.log(sql.list);
         
         // list = await func.connPool(`SELECT * FROM ${table} LIMIT ${start},${showCount}`, [])
         list = await func.connPool(sql.list)

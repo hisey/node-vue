@@ -1,5 +1,5 @@
 import fetch from '../utils/fetch'
-
+let adminPath = "/api/admin"
 // export function login(user_name, pass) {
 //   return request({
 //     url: '/api/user/login',
@@ -16,7 +16,8 @@ import fetch from '../utils/fetch'
 //     pass
 //   })
 // }
-export const login = fetch.post('/api/user/login')
+export const login = fetch.post(`${adminPath}/user/login`)
+export const logOut = fetch.post(`${adminPath}/user/logout`)
 
 // export function getInfo(token) {
 //   return request({

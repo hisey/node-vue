@@ -14,7 +14,7 @@ module.exports = {
     async fetchAll(req, res) {
         let curentPage = req.query.curentPage;
         let showCount = req.query.showCount;
-        // console.log(req.query);
+        // //console.log(req.query);
         if (curentPage == '' || curentPage == null || curentPage == undefined) {
             res.json({ code: 102, msg: '请传入当前页码' });
             return;
@@ -27,7 +27,7 @@ module.exports = {
             count:"SELECT COUNT(*) FROM adminUser",
             list:`SELECT * FROM adminUser LIMIT ${start},${showCount}`
         }
-        console.log(sql.list);
+        //console.log(sql.list);
         let data = await paging(res, sql, curentPage, showCount)
         if (data) {
             res.json({ code: 200, msg: 'done', data });
@@ -44,7 +44,7 @@ module.exports = {
 
         // 密码加盐
         bcrypt.hash(pass, 10, async (err, hash) => {
-            if (err) console.log(err);
+            if (err) //console.log(err);
             pass = hash;
             let arr = [name, pass, role];
             let data = await func.connPool(query, arr)

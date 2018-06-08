@@ -58,15 +58,31 @@ export const constantRouterMap = [
       },
       {
         path: 'addGoods',
+        hidden: true,
         name: 'addGoods',
         component: () => import('@/views/goodsManage/addGoods'),
         meta: { title: '新增商品', icon: 'tree' }
       },
       {
+        path: 'editGoods',
+        hidden: true,
+        name: 'editGoods',
+        component: () => import('@/views/goodsManage/addGoods'),
+        meta: { title: '编辑商品', icon: 'tree' }
+      },
+      {
         path: 'addClass',
+        hidden: true,
         name: 'addClass',
         component: () => import('@/views/goodsManage/addClass'),
         meta: { title: '新增分类', icon: 'tree' }
+      },
+      {
+        path: 'editClass',
+        hidden: true,
+        name: 'editClass',
+        component: () => import('@/views/goodsManage/addClass'),
+        meta: { title: '编辑分类', icon: 'tree' }
       }
     ]
   },

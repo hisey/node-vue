@@ -1,6 +1,10 @@
 //引入axios
 import axios from 'axios'
 import qs from 'qs'
+import { MessageBox } from 'element-ui'
+import { removeToken } from '@/utils/auth'
+import urls  from '@/utils/env'
+// import Vue from 'vue'
 
 let cancel, promiseArr = {}
 const CancelToken = axios.CancelToken;
@@ -27,8 +31,24 @@ axios.interceptors.request.use(config => {
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-  // console.log(response);
-  return response.data
+  /**
+   * 下面的注释为通过response自定义code来标示请求状态，当code返回如下情况为权限有问题，登出并返回到登录页
+   * 如通过xmlhttprequest 状态码标识 逻辑可写在下面error中
+   */
+  const res = response.data;
+  if (res.code =='301') {
+    MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+      confirmButtonText: '重新登录',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      removeToken()
+      location.reload();
+    })
+  }
+  else {
+    return res;
+  }
 }, err => {
   if (err && err.response) {
     switch (err.response.status) {
@@ -78,13 +98,13 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(err.response)
 })
 
-let basicUrl = ""
-if (process.env.NODE_ENV == "development") {
-  basicUrl = "http://localhost:9999"
-} else {
-  basicUrl = "http://193.112.202.42:9999"
-}
-axios.defaults.baseURL = basicUrl
+// let basicUrl = ""
+// if (process.env.NODE_ENV == "development") {
+//   basicUrl = "http://localhost:9999"
+// } else {
+//   basicUrl = "http://193.112.202.42:9999"
+// }
+axios.defaults.baseURL = urls.basicUrl
 //设置默认请求头
 // axios.defaults.headers = {
 //     'X-Requested-With': 'XMLHttpRequest'

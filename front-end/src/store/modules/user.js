@@ -7,7 +7,8 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    islogin: 0
   },
 
   mutations: {
@@ -22,6 +23,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_LOGIN: (state, islogin) => {
+      state.islogin = islogin;
     }
   },
 
@@ -32,11 +36,11 @@ const user = {
       // async function login(username, userInfo.password) {
       const res = await login({ user_name: username, pass: userInfo.password })
       console.log(res);
-      if(res.code==400){   
-      // console.log(Vue);
+      if (res.code == 400) {
+        // console.log(Vue);
         this.$message(res.msg);
       }
-      
+
       // } 
     },
     // return new Promise((resolve, reject) => {

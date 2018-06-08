@@ -1,5 +1,5 @@
 import fetch from '../utils/fetch'
-
+let adminPath = "/api/admin"
 // export function login(user_name, pass) {
 //   return request({
 //     url: '/api/user/login',
@@ -16,10 +16,18 @@ import fetch from '../utils/fetch'
 //     pass
 //   })
 // }
-export const getGoodsList= fetch.get('api/admin/goods/list')
-export const addGoods= fetch.post('api/admin/goods/addGoods')
-export const addGoodsCategory= fetch.post('api/admin/goods/addGoodsCategory')
-export const goodsCategory= fetch.get('api/admin/goods/goodsCategory')
+export const getGoodsList = fetch.get(`${adminPath}/goods/getList`)
+export const addGoods = fetch.post(`${adminPath}/goods/addGoods`)
+export const addGoodsCategory = fetch.post(`${adminPath}/goods/addGoodsCategory`)
+export const getGoodsCategory = fetch.get(`${adminPath}/goods/getCategory`)
+export const shelfGoods = fetch.post(`${adminPath}/goods/shelf`)
+export const delGoods = fetch.post(`${adminPath}/goods/deleteGoods`)
+export const shelfClass = fetch.post(`${adminPath}/goods/shelfCategory`)
+export const delClass = fetch.post(`${adminPath}/goods/deleteCategory`)
+
+export const addClass = fetch.post(`${adminPath}/goods/addCategory`)
+
+
 
 // export function getInfo(token) {
 //   return request({

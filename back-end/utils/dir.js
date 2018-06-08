@@ -26,7 +26,7 @@ let rmdir = function (req, res) {
     let url=req.query.url
     fs.rmdir(url, function (e) {
         if (e) {
-            console.log(e)
+            //console.log(e)
         }
     })
 }

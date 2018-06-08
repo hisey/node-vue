@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+    <div class="clearfix">
+        <el-button size="small"  type="primary" style="float:right"><router-link :to="{path:'/goodsManage/addGoods'}">新增商品</router-link></el-button>
+    </div>
+    <el-table style="margin-top:15px;"  :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label='ID' width="95">
         <template slot-scope="scope">
           {{scope.$index+1}}
@@ -31,14 +34,22 @@
           {{scope.row.create_time}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否上架" width="110" align="center">
+      <el-table-column  label="商品状态" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.shelf | statusFilter">{{scope.row.shelf | statusToStr}}</el-tag>
+          <el-tag size="mini" :type="scope.row.shelf | shelfTagFilter">{{scope.row.shelf | shelfTextFilter}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否热推" width="110" align="center">
+      <el-table-column label="商品属性" width="210" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.onsale | statusFilter">{{scope.row.onsale | statusToStr}}</el-tag>
+          <el-tag style="margin:0 5px;" v-for="(item, index) in scope.row.onsale.split(',')" :key="index" size="mini" :type="item | onsaleTagFilter">{{item | onsaleTextFilter}}</el-tag>
+        </template>
+      </el-table-column>
+       <el-table-column label="操作" width="310" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary">编辑</el-button>
+          <el-button size="mini" v-if="scope.row.shelf==0" @click="shelf(scope.row.id,1)">上架</el-button>
+          <el-button size="mini" type="warning" v-if="scope.row.shelf==1" @click="shelf(scope.row.id,0)">下架</el-button>
+          <el-button size="mini" type="danger" @click="handDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,30 +64,48 @@
 </template>
 
 <script>
-import { getGoodsList } from "@/api/goods";
+import { getGoodsList, shelfGoods, delGoods } from "@/api/goods";
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true,
-      showCount: 10,
+      showCount: 3,
       total: 1,
       currentPage: 1
     };
   },
   filters: {
-    statusFilter(status) {
+    shelfTagFilter(status) {
       const statusMap = {
-        1: "success",
-        0: "gray"
+        0: "info",
+        1: "success"
       };
       return statusMap[status];
     },
-    statusToStr(status) {
+    shelfTextFilter(status) {
       const statusMap = {
-        1: "是",
-        0: "否"
+        1: "上架",
+        0: "下架"
+      };
+      return statusMap[status];
+    },
+    onsaleTagFilter(status) {
+      const statusMap = {
+        1: "",
+        2: "success",
+        3: "warning",
+        4: "danger"
+      };
+      return statusMap[status];
+    },
+    onsaleTextFilter(status) {
+      const statusMap = {
+        1: "推荐",
+        2: "优选",
+        3: "折扣",
+        4: "热门"
       };
       return statusMap[status];
     }
@@ -95,11 +124,40 @@ export default {
         curentPage: this.currentPage,
         showCount: this.showCount
       });
-      data = data.data;   
+      data = data.data;
       this.list = data.arr;
       this.listLoading = false;
       this.total = data.totalCount;
       this.pageSize = data.totalPages;
+    },
+    async shelf(id, shelf) {
+      let data = await shelfGoods({
+        id,
+        shelf
+      });
+      if (data.code == 200) {
+        this.$message({
+          message: data.msg,
+          type: "success",
+          onClose: () => {
+            this.fetchData();
+          }
+        });
+      }
+    },
+    async handDelete(id) {
+      let data = await delGoods({
+        id
+      });
+      if (data.code == 200) {
+        this.$message({
+          message: data.msg,
+          type: "success",
+          onClose: () => {
+            this.fetchData();
+          }
+        });
+      }
     }
   }
 };

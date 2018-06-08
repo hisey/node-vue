@@ -31,6 +31,7 @@
 
 <script>
 import { isvalidUsername } from "@/utils/validate";
+import { setToken } from '@/utils/auth' // 验权
 import { login } from "@/api/login";
 
 export default {
@@ -90,6 +91,7 @@ export default {
               type: "warning"
             });
           }else{
+            setToken("1")
             this.$message({
               message: res.msg,
               type: "success"

@@ -30,7 +30,7 @@ app.use(allowCrossDomain)
 // 配置session
 app.use(session({
     secret: 'fuckupig',
-    cookie: { maxAge: 3600000 },
+    cookie: { maxAge: 36000000 },
     resave: true,
     saveUninitialized: true,
 }));
@@ -38,15 +38,15 @@ app.use(session({
 //配置拦截器
 app.use(function (req, res, next) {
     var url = req.url;
-    if (url.indexOf("admin") > -1) {
+    if (url.indexOf("admin") > -1 && url.indexOf("login") == -1) {
         var user = req.session.login;
-        // console.log(req.session);
-        // if (user) {
-        next();
-        // }
-        // else {
-        // return res.json({ code: 301, msg: '用户未登陆' });
-        // }
+        //console.log(req.session);
+        if (user) {
+            next();
+        }
+        else {
+            return res.json({ code: 301, msg: '用户未登陆' });
+        }
     }
     else {
         next();
@@ -56,6 +56,6 @@ app.use(function (req, res, next) {
 app.use(router);
 
 app.listen(port, () => {
-    console.log(`devServer start on port:${port}`);
-    console.log(allowDomain);
+    //console.log(`devServer start on port:${port}`);
+    //console.log(allowDomain);
 });
