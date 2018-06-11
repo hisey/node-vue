@@ -3,5 +3,5 @@ module.exports = {
       user: 'root',
       pass: 'v2DAugvhzXYLjD',
       port: "22",
-      remotePath: "/var/hisey/app/front-end/"
+      remotePath: "/var/hisey/app/front-end/dist"
 };
