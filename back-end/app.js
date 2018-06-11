@@ -36,24 +36,42 @@ app.use(session({
 }));
 
 //配置拦截器
-app.use(function (req, res, next) {
-    var url = req.url;
-    if (url.indexOf("admin") > -1 && url.indexOf("login") == -1) {
-        var user = req.session.login;
-        //console.log(req.session);
-        if (user) {
-            next();
-        }
-        else {
-            return res.json({ code: 301, msg: '用户未登陆' });
-        }
-    }
-    else {
-        next();
-    }
-});
+// app.use(function (req, res, next) {
+//     var url = req.url;
+//     if (url.indexOf("admin") > -1 && url.indexOf("login") == -1) {
+//         var user = req.session.login;
+//         //console.log(req.session);
+//         if (user) {
+//             next();
+//         }
+//         else {
+//             return res.json({ code: 301, msg: '用户未登陆' });
+//         }
+//     }
+//     else {
+//         next();
+//     }
+// });
 
 app.use(router);
+
+app.use(express.static(path.join(__dirname, './public')));
+
+// app.all('/public/', function (req, res) {
+//     // console.log("=======================================");
+//     console.log("请求路径：" + req.url);
+//     var filename = req.url.split('/')[req.url.split('/').length - 1];
+//     var suffix = req.url.split('.')[req.url.split('.').length - 1];
+//     if (suffix in ['gif', 'jpeg', 'jpg', 'png']) {
+//         res.writeHead(200, { 'Content-Type': 'image/' + suffix });
+//         res.end(get_file_content(path.join(__dirname, 'public', 'images', filename)));
+//     }
+// });
+
+
+function get_file_content(filepath) {
+    return fs.readFileSync(filepath);
+}
 
 app.listen(port, () => {
     //console.log(`devServer start on port:${port}`);
