@@ -6,7 +6,9 @@ module.exports = {
     connPool(sql, val) {
         return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
-                // //console.log("连接成功");
+                console.log("连接成功");
+                console.log(conn); 
+                console.log(err);                
                 let q = conn.query(sql, val, (err, rows) => {
                     // //console.log(rows);
                     if ( err ) {
