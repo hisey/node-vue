@@ -36,7 +36,55 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-
+  // {
+  //   path: '/userManage',
+  //   component: Layout,
+  //   redirect: '/userManage/userList',
+  //   name: 'userManage',
+  //   meta: { title: '用户管理', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'goodsList',
+  //       name: 'goodsList',
+  //       component: () => import('@/views/goodsManage/goodsList'),
+  //       meta: { title: '商品列表', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'classList',
+  //       name: 'classList',
+  //       component: () => import('@/views/goodsManage/classList'),
+  //       meta: { title: '分类列表', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'addGoods',
+  //       hidden: true,
+  //       name: 'addGoods',
+  //       component: () => import('@/views/goodsManage/addGoods'),
+  //       meta: { title: '新增商品', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'editGoods',
+  //       hidden: true,
+  //       name: 'editGoods',
+  //       component: () => import('@/views/goodsManage/addGoods'),
+  //       meta: { title: '编辑商品', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'addClass',
+  //       hidden: true,
+  //       name: 'addClass',
+  //       component: () => import('@/views/goodsManage/addClass'),
+  //       meta: { title: '新增分类', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'editClass',
+  //       hidden: true,
+  //       name: 'editClass',
+  //       component: () => import('@/views/goodsManage/addClass'),
+  //       meta: { title: '编辑分类', icon: 'tree' }
+  //     }
+  //   ]
+  // },
   {
     path: '/goodsManage',
     component: Layout,

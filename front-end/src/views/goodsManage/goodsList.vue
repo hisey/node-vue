@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="clearfix">
-      <el-button size="small" type="primary" style="float:right">
-        <router-link :to="{path:'/goodsManage/addGoods'}">新增商品</router-link>
+      <el-button size="small" type="primary" style="float:right" @click='enterAddGoods()'>
+        新增商品
       </el-button>
     </div>
     <el-table style="margin-top:15px;" :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column label="操作" width="310" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary">编辑</el-button>
+          <el-button size="mini" type="primary" @click='enterAddGoods(scope.row.id)'>编辑</el-button>
           <el-button size="mini" v-if="scope.row.shelf==0" @click="shelf(scope.row.id,1,scope.row.category_id)">上架</el-button>
           <el-button size="mini" type="warning" v-if="scope.row.shelf==1" @click="shelf(scope.row.id,0,scope.row.category_id)">下架</el-button>
           <el-button size="mini" type="danger" @click="handDelete(scope.row.id)">删除</el-button>
@@ -128,7 +128,7 @@ export default {
       this.total = data.totalCount;
       this.pageSize = data.totalPages;
     },
-    async shelf(id, shelf,category_id) {
+    async shelf(id, shelf, category_id) {
       let data = await shelfGoods({
         id,
         shelf,
@@ -156,6 +156,15 @@ export default {
             this.fetchData();
           }
         });
+      }
+    },
+    enterAddGoods(id) {
+      // console.log(this);
+      
+      if (id) {
+        this.$router.push({ path: "/goodsManage/editGoods", query: { id } })
+      } else {
+        this.$router.push({ path: "/goodsManage/addGoods" })
       }
     }
   }

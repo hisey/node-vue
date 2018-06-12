@@ -59,10 +59,11 @@ module.exports = {
         // //console.log(id)
         let data = await func.connPool(sql.queryById, ['goods', id])
         data = data[0];
-        data.create_time = new Date(data.create_time).toLocaleString()
-        data.update_time = new Date(data.update_time).toLocaleString()
+        // data.create_time = new Date(data.create_time).toLocaleString()
+        // data.update_time = new Date(data.update_time).toLocaleString()
         //console.log(sql.queryById)
-        //console.log(data)
+        // console.log(data)
+        data.imgs = data.imgs == 0 ? "" : data.imgs
         res.json({ code: 200, msg: 'done', goods: data });
     },
 
@@ -72,11 +73,10 @@ module.exports = {
         let shelf;
         let result = await func.connPool(sql)
         req.body.category_name = result[0].name;
-        shelf = req.body.shelf == true ? 1 : 0;
-        req.body.shelf = shelf;
         req.body.onsale = req.body.onsale.toString();
-        req.body.imgs = req.body.imgs.toString();
-        console.log(req.body.imgs);
+        // req.body.imgs = req.body.imgs.length > 0 ? req.body.imgs.toString() : "";
+        // req.body.imgs=JSON.stringify(req.body.imgs);
+        console.log(req.body);
 
         addOne(req, res, "goods")
     },

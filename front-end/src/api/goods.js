@@ -24,7 +24,7 @@ export const shelfGoods = fetch.post(`${adminPath}/goods/shelf`)
 export const delGoods = fetch.post(`${adminPath}/goods/deleteGoods`)
 export const shelfClass = fetch.post(`${adminPath}/goods/shelfCategory`)
 export const delClass = fetch.post(`${adminPath}/goods/deleteCategory`)
-
+export const getGoodsDetail = fetch.get(`${adminPath}/goods/getDetail`)
 export const addClass = fetch.post(`${adminPath}/goods/addCategory`)
 
 

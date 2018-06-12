@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version 5.7.22-log)
-# Date: 2018-06-11 18:12:36
+# Date: 2018-06-12 16:21:12
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
 
@@ -61,21 +61,21 @@ CREATE TABLE `goods` (
   `name` varchar(50) DEFAULT '' COMMENT '名称',
   `price` float NOT NULL DEFAULT '0' COMMENT '价格',
   `inventory` int(11) NOT NULL DEFAULT '0' COMMENT '库存',
-  `imgs` varchar(255) DEFAULT '' COMMENT '图片',
+  `imgs` text COMMENT '图片',
   `onsale` varchar(15) NOT NULL DEFAULT '0' COMMENT '属性（1、推荐，2、优选，3、折扣，4、热门）',
   `shelf` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否上架（1、是，0、否）',
   `category_id` int(11) DEFAULT NULL COMMENT '所属分类id',
   `cover` varchar(255) DEFAULT NULL COMMENT '商品封面',
   `category_name` varchar(50) DEFAULT NULL COMMENT '分类名',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1185 DEFAULT CHARSET=utf8 COMMENT='商品';
+) ENGINE=MyISAM AUTO_INCREMENT=1188 DEFAULT CHARSET=utf8 COMMENT='商品';
 
 #
 # Data for table "goods"
 #
 
 /*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-INSERT INTO `goods` VALUES (1185,'2018-06-11 17:33:00',NULL,'苹果3斤',14.99,300,'/goodsPic/hut7X7CVqsU8ZX8KL62FvYMW.jpg,/goodsPic/p5WSwXqkC8aTH66rOqeOgAh5.jpg,/goodsPic/uO0DUING5XhHSOpnnkcIMChB.jpg','2,4',1,12,'/goodsPic/mRtjrLn_IIlYYmzhPn8wwOf5.jpg','水果'),(1186,'2018-06-11 17:33:00',NULL,'梨子2斤',10.99,400,'/goodsPic/Q-oYIUX-PZrNBdGc8cZUt17p.jpg,/goodsPic/K-KfM-jG4CAZ5C2bXFqY4yNt.jpg,/goodsPic/_eJD6EHb3GiotBqWD8Kb6MBa.jpg','2,1',1,12,'/goodsPic/QgodsvUzH_12uHwHZ-qD04RL.jpg','水果');
+INSERT INTO `goods` VALUES (1185,'2018-06-11 17:33:00',NULL,'苹果3斤',14.99,300,'/goodsPic/hut7X7CVqsU8ZX8KL62FvYMW.jpg,/goodsPic/p5WSwXqkC8aTH66rOqeOgAh5.jpg,/goodsPic/uO0DUING5XhHSOpnnkcIMChB.jpg','2,4',0,12,'/goodsPic/mRtjrLn_IIlYYmzhPn8wwOf5.jpg','水果'),(1186,'2018-06-11 17:33:00','2018-06-12 15:56:00','梨子2斤',10.99,400,'0','2,1',0,12,'/goodsPic/QgodsvUzH_12uHwHZ-qD04RL.jpg','水果');
 /*!40000 ALTER TABLE `goods` ENABLE KEYS */;
 
 #
@@ -90,14 +90,14 @@ CREATE TABLE `goods_category` (
   `update_time` timestamp NULL DEFAULT NULL,
   `shelf` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否上架',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='商品分类';
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='商品分类';
 
 #
 # Data for table "goods_category"
 #
 
 /*!40000 ALTER TABLE `goods_category` DISABLE KEYS */;
-INSERT INTO `goods_category` VALUES (12,'水果','2018-06-11 17:06:00',NULL,1);
+INSERT INTO `goods_category` VALUES (12,'水果','2018-06-11 17:06:00',NULL,0);
 /*!40000 ALTER TABLE `goods_category` ENABLE KEYS */;
 
 #

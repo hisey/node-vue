@@ -6,7 +6,7 @@
       </el-form-item>
 
       <el-form-item label="商品价格" prop="price">
-        <el-input placeholder="请输入内容" v-model="goodsForm.price">
+        <el-input placeholder="请输入内容" v-model="goodsForm.price" type="number">
           <template slot="append">元</template>
         </el-input>
       </el-form-item>
@@ -39,16 +39,14 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="商品图片" prop="imgs">
-        <el-upload class="upload-demo" :action="uploadUrl" :on-success="handleImgSuccess" :on-remove="handleImgRemove" list-type="picture">
+        <el-upload class="upload-demo" :action="uploadUrl" :on-success="handleImgSuccess" :on-remove="handleImgRemove" :file-list="goodsForm.fileList" list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
-
       <el-form-item>
-        <el-button type="primary" @click="submitForm('goodsForm')">立即创建</el-button>
-        <el-button @click="resetForm('goodsForm')">重置</el-button>
-        <!-- <el-button @click="onCancel">取消</el-button> -->
+        <el-button type="primary" size="mini" @click="submitForm('goodsForm')">確定</el-button>
+        <!-- <el-button @click="resetForm('goodsForm')">重置</el-button> -->
       </el-form-item>
 
     </el-form>
@@ -56,8 +54,9 @@
 </template>
 
 <script>
-import { getGoodsCategory, addGoods } from "@/api/goods";
+import { getGoodsCategory, addGoods, getGoodsDetail } from "@/api/goods";
 import urls from "@/utils/env";
+import { param, parseQueryString } from "@/utils";
 export default {
   name: "goodsFrom",
   data() {
@@ -73,6 +72,7 @@ export default {
         price: "",
         category_id: "",
         imgs: [],
+        fileList: [],
         cover: ""
       },
       goodsFormRule: {
@@ -93,26 +93,26 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.goodsForm.cover = res.msg;
-      // this.imageUrl = URL.createObjectURL(file.msg);
     },
     handleImgSuccess(res, file) {
-      this.goodsForm.imgs.push(res.msg)
+      this.goodsForm.fileList.push({ name: file.name, url: this.picUrl + file.response.msg })
+      // console.log(this.goodsForm.fileList);
     },
     handleImgRemove(file) {
       let index = 0;
       let num = 0;
-      let path = file.response.msg;
-      let arr = this.goodsForm.imgs;
-      // console.log(arr[0]);
-      // console.log(arr[1]);
+      let uid = file.uid;
+      let arr = this.goodsForm.fileList;
+      // console.log(file);   
       for (index in arr) {
-        if (arr[index] == path) {
+        if (arr[index].uid == uid) {
           num = index;
         }
       }
-      arr.splice(num, 1)
-      // console.log(arr);      
-      this.goodsForm.imgs = arr;
+      // console.log(this.goodsForm.fileList);      
+      this.goodsForm.fileList.splice(num, 1)
+      console.log(this.goodsForm.fileList);
+      // this.goodsForm.imgs = arr;
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
@@ -128,13 +128,28 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          // console.log(this.goodsForm.fileList);
+          let arr = [];
+          let fileList = this.goodsForm.fileList;
+          if (fileList && fileList.length > 0) {
+            for (let i = 0; i < fileList.length; i++) {
+              arr.push(param(fileList[i]));
+              arr[i] = arr[i].replace(urls.basicUrl, "");
+            }
+            this.goodsForm.imgs = arr.toString();
+          } else {
+            this.goodsForm.imgs = '';
+          }
+          let postData = this.goodsForm;
+          delete postData.fileList;
+          // console.log(postData);
           let data = await addGoods(this.goodsForm);
           if (data.code == 200) {
             this.$message({
               type: 'success',
               message: '操作成功!',
               onClose: () => {
-                 this.$router.go(-1)
+                this.$router.go(-1)
               }
             });
           }
@@ -144,12 +159,42 @@ export default {
         }
       });
     },
+    async fecthDate(id) {
+      let data = await getGoodsDetail({ id });
+      data = data.goods;
+      let imgs = data.imgs == null || data.imgs == " " ? [] : data.imgs.split(',');
+      let arr = [];
+      data.onsale = data.onsale == null ? [] : data.onsale.split(',');
+      data.price = data.price.toString();
+      delete data.create_time;
+      delete data.update_time;
+      // data.fileList = [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      // console.log(imgs == null || " ");
+      if (imgs.length > 0) {
+        for (let i = 0; imgs.length > i; i++) {
+          arr.push(parseQueryString(imgs[i]))
+          arr[i].url = urls.basicUrl + arr[i].url
+        }
+        data.fileList = arr;
+      } else {
+        data.fileList = [];
+      }
+      console.log(data);
+      this.goodsForm = data;
+      // console.log(imgs);
+      // console.log(arr);
+      // console.log(data);
+
+    }
   },
 
   created() {
     this.id = this.$route.query.id;
     this.getGoodClass();
-    // console.log(this.uploadUrl);
+    if (this.id) {
+      this.fecthDate(this.id)
+    }
+
 
     // if (id) {
     //   this.isNew = 0;
