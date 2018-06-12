@@ -8,7 +8,7 @@ let mkdirSync = require('./dir').mkdirSync;
 let upload = function (req, res) {
     // //console.log(req);
     //生成multiparty对象，并配置上传目标路径
-    let uploadDir = './uploadFiles/' + req.query.dir
+    let uploadDir = './public/' + req.query.dir
     mkdirSync(uploadDir, 0, function (e) {
         if (e) {
             //console.log('出错了');
@@ -27,8 +27,8 @@ let upload = function (req, res) {
             // console.log(filesTmp)
             var inputFile = files.file[0];
             var uploadedPath = inputFile.path;
-            uploadedPath = uploadedPath.replace("\\\\", "\/\/").replace("\\", "\/").replace("\\", "\/");
-            // var dstPath = './public/files/' + inputFile.originalFilename;
+            uploadedPath = uploadedPath.replace("\\\\", "\/\/").replace("\\", "\/").replace("\\", "\/").replace("public","");
+            // var dstPath = '/' + req.query.dir + '/' + inputFile.originalFilename;
             //重命名为真实文件名
             // fs.rename(uploadedPath, dstPath, function (err) {
             //     if (err) {

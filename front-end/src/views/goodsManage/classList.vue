@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="clearfix">
-        <el-button size="small"  type="primary" style="float:right" @click="addClass()">新增分类</el-button>
+      <el-button size="small" type="primary" style="float:right" @click="addClass()">新增分类</el-button>
     </div>
     <el-table style="margin-top:15px;" :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label='ID' width="95">
@@ -19,7 +19,7 @@
           {{scope.row.create_time}}
         </template>
       </el-table-column>
-      <el-table-column  label="分类状态" width="110" align="center">
+      <el-table-column label="分类状态" width="110" align="center">
         <template slot-scope="scope">
           <el-tag size="mini" :type="scope.row.shelf | shelfTagFilter">{{scope.row.shelf | shelfTextFilter}}</el-tag>
         </template>
@@ -90,27 +90,31 @@ export default {
         });
       }
     },
-    handDelete(id,name) {
+    handDelete(id, name) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async() => {
-          let data = await delClass({
-              id
-            });
-          if (data.code == 200) {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let data = await delClass({
+          id
+        });
+        if (data.code == 200) {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: '删除成功!',
+            onClose: () => {
+              this.fetchData();
+            }
           });
-          }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+          //  this.fetchData();
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
+      });
       // this.$alert(
       //   "删除这个分类，其包含的所有商品均被删除，确定要删除吗",
       //   "删除商品",
@@ -133,12 +137,12 @@ export default {
       //   }
       // );
     },
-    addClass(id,val) {
+    addClass(id, val) {
       this.$prompt("请输入分类名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /\S/,
-        inputValue:val,
+        inputValue: val,
         inputErrorMessage: "分类名称不能为空"
       })
         .then(async ({ value }) => {

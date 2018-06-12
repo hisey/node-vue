@@ -24,8 +24,8 @@ module.exports = {
         }
         let start = (curentPage - 1) * parseInt(showCount);
         let sql = {
-            count:"SELECT COUNT(*) FROM adminUser",
-            list:`SELECT * FROM adminUser LIMIT ${start},${showCount}`
+            count:"SELECT COUNT(*) FROM admin_user",
+            list:`SELECT * FROM admin_user LIMIT ${start},${showCount}`
         }
         //console.log(sql.list);
         let data = await paging(res, sql, curentPage, showCount)
@@ -40,7 +40,7 @@ module.exports = {
         let name = req.body.name;
         let pass = req.body.pass;
         let role = req.body.role;
-        let query = 'INSERT INTO adminUser(user_name, password, role) VALUES(?, ?, ?)';
+        let query = 'INSERT INTO admin_user(user_name, password, role) VALUES(?, ?, ?)';
 
         // 密码加盐
         bcrypt.hash(pass, 10, async (err, hash) => {
@@ -59,7 +59,7 @@ module.exports = {
 
         let id = req.body.id;
 
-        let data = await func.connPool(sql.del, ['adminUser', id])
+        let data = await func.connPool(sql.del, ['admin_user', id])
         res.json({ code: 200, msg: 'done' });
         // });
 
@@ -68,7 +68,7 @@ module.exports = {
     // 批量删除
     async deleteMulti(req, res) {
         let id = req.body.id;
-        let data = await func.connPool('DELETE FROM adminUser WHERE id IN ?', [[id]])
+        let data = await func.connPool('DELETE FROM admin_user WHERE id IN ?', [[id]])
         res.json({ code: 200, msg: 'done' });
     },
 
@@ -76,7 +76,7 @@ module.exports = {
     async login(req, res) {
         let user_name = req.body.user_name;
         let pass = req.body.pass;
-        let data = await func.connPool('SELECT * from adminUser where user_name = ?', [user_name])
+        let data = await func.connPool('SELECT * from admin_user where user_name = ?', [user_name])
         if (!data.length) {
             res.json({ code: 400, msg: '用户名不存在' });
             return;
@@ -142,7 +142,7 @@ module.exports = {
         }
 
         let user_id = req.body.id;
-        let data = await func.connPool('UPDATE adminUser SET role= ? WHERE id = ?', [change_role, user_id])
+        let data = await func.connPool('UPDATE admin_user SET role= ? WHERE id = ?', [change_role, user_id])
         if (data.affectedRows) {
             res.json({ code: 200, msg: 'done' });
         }

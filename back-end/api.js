@@ -25,6 +25,6 @@ module.exports = {
     adminUserAutoLogin: path + '/user/autoLogin',                        //自动登陆
 
     //file
-    uploading: 'api/file/uploading',                                   //文件上传
-    rmdir: 'api/file/rmdir',                                           //文件删除    
+    uploading: '/api/file/uploading',                                   //文件上传
+    rmdir: '/api/file/rmdir',                                           //文件删除    
 };

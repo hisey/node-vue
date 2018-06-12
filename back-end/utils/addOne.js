@@ -15,7 +15,7 @@ let addOrUpdataSql = function (obj, table) {
         query = `UPDATE ${table} SET ${arr1.join(',')} , update_time=? WHERE id=?`;
     } else {
         // 新增
-        query = `INSERT INTO ${table} (${arr2.join(',')},create_time) VALUES(${arr3.join(',')} ,?)`;
+        query = `INSERT INTO ${table} (${arr2.join(',')},create_time) VALUES(${arr3.join(',')},?)`;
     }
     return query
 }
@@ -35,6 +35,8 @@ let addOne = async(req, res, table)=> {
         arr.push(id)
     }
     query = addOrUpdataSql(body, table)
+    console.log(query);
+    
     let data = await func.connPool(query, arr);
     res.send({ code: 200, msg: 'done' });
 }
