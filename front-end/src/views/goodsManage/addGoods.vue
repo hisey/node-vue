@@ -44,6 +44,11 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
+      <el-form-item label="商品描述" prop="description">
+        <div id="editor">
+
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" size="mini" @click="submitForm('goodsForm')">確定</el-button>
         <!-- <el-button @click="resetForm('goodsForm')">重置</el-button> -->
@@ -57,6 +62,7 @@
 import { getGoodsCategory, addGoods, getGoodsDetail } from "@/api/goods";
 import urls from "@/utils/env";
 import { param, parseQueryString } from "@/utils";
+import E from 'wangEditor';
 export default {
   name: "goodsFrom",
   data() {
@@ -73,7 +79,8 @@ export default {
         category_id: "",
         imgs: [],
         fileList: [],
-        cover: ""
+        cover: "",
+        description: ""
       },
       goodsFormRule: {
         name: [{ required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -142,8 +149,8 @@ export default {
           }
           let postData = this.goodsForm;
           delete postData.fileList;
-          // console.log(postData);
-          let data = await addGoods(this.goodsForm);
+          // console.log();
+          let data = await addGoods(postData);
           if (data.code == 200) {
             this.$message({
               type: 'success',
@@ -179,26 +186,28 @@ export default {
       } else {
         data.fileList = [];
       }
-      console.log(data);
       this.goodsForm = data;
-      // console.log(imgs);
-      // console.log(arr);
-      // console.log(data);
+      this.createEditor()
 
+    },
+    createEditor() {
+      var editor = new E('#editor');
+      // console.log(editor);
+      editor.customConfig.onchange = (html) => {
+        this.goodsForm.description = html;
+      }
+      editor.create();
+      editor.txt.html(this.goodsForm.description);
     }
   },
-
-  created() {
+  mounted() {
     this.id = this.$route.query.id;
     this.getGoodClass();
     if (this.id) {
       this.fecthDate(this.id)
+    } else {
+      createEditor();
     }
-
-
-    // if (id) {
-    //   this.isNew = 0;
-    // }
   }
 };
 </script>

@@ -25,15 +25,22 @@ router.post(api.goodsShelfCategory, goods.shelfCategory);
 
 
 // adminUser
-router.get(api.adminUserList, user.fetchAll);
-router.post(api.adminUserLogout, user.logout);
+router.get(api.adminUserList, user.getAdminUserList);   //获取系统用户列表
+router.post(api.adminUserLogout, user.logout);  //登出
 router.post(api.adminUserAutoLogin, user.autoLogin); // 自动登录
+router.post(api.adminUserAdd, user.addAdminUser);  //添加系统用户
+router.post(api.adminUserDelete, user.deleteAdminUser); //删除系统用户  
+router.post(api.adminUserDeleteMulti, user.deleteAdminUserMulti); //批量删除系统用户
+router.post(api.adminUserLogin, user.login); // admin登录
+router.post(api.adminUserStatusChange, user.changeAdminUserStatus); // admin登录
 
-router.post(api.adminUserAdd, user.addOne);
-router.post(api.adminUserDelete, user.deleteOne);
-router.post(api.adminUserDeleteMulti, user.deleteMulti);
-router.post(api.adminUserLogin, user.login); // 登录
-router.post(api.userChangeRole, user.controlVisit, user.changeRole); // 更改权限
+//role
+router.get(api.adminUserRoleList, user.getAdminUserRoleList); // 获取角色列表
+router.post(api.adminUserRoleAdd, user.addAdminUserRole); // 新增角色
+router.post(api.adminUserRoleDelete, user.deleteAdminUserRole); // 删除角色
+router.post(api.adminRoleStatusChange, user.changeAdminRoleStatus); // 改变角色状态
+
+// router.post(api.userChangeRole, user.controlVisit, user.changeRole); // 更改权限
 
 /* 上传*/
 router.post(api.uploading, upload);

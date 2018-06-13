@@ -14,15 +14,22 @@ module.exports = {
     goodsShelfCategory: path + '/goods/shelfCategory',             //下架分类
     // goodsUploadImg: path + '/goods/upload-img',
 
-    // user
-    adminUserList: path + '/user/getList',                               //列表
-    adminUserDelete: path + '/user/delete',                              //删除
-    adminUserAdd: path + '/user/add',                                    //新增|更新
-    adminUserDeleteMulti: path + '/user/deleteMulti',                    //批量删除
-    adminUserLogout: path + '/user/logout',                              //注销
-    userChangeRole: path + '/user/changeRole',                      //改变角色
-    adminUserLogin: path + '/user/login',                                //登陆
-    adminUserAutoLogin: path + '/user/autoLogin',                        //自动登陆
+    // adminUser
+    adminUserList: path + '/adminUser/getList',                               //列表
+    adminUserDelete: path + '/adminUser/delete',                              //删除
+    adminUserAdd: path + '/adminUser/add',                                    //新增|更新
+    adminUserDeleteMulti: path + '/adminUser/deleteMulti',                    //批量删除
+    adminUserStatusChange: path + '/adminUser/changeStatus',                  //改变系统用户状态
+    
+    //role
+    adminUserRoleList:path + '/adminUser/getRoleList',
+    adminUserRoleAdd:path + '/adminUser/addUserRole',
+    adminUserRoleDelete:path + '/adminUser/deleteRole',
+    adminRoleStatusChange:path + '/adminUser/changeRoleStatus',
+
+    adminUserLogout: path + '/adminUser/logout',                              //注销
+    adminUserLogin: path + '/adminUser/login',                                //登陆
+    adminUserAutoLogin: path + '/adminUser/autoLogin',                        //自动登陆
 
     //file
     uploading: '/api/file/uploading',                                   //文件上传
