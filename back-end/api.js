@@ -20,6 +20,7 @@ module.exports = {
     adminUserAdd: path + '/adminUser/add',                                    //新增|更新
     adminUserDeleteMulti: path + '/adminUser/deleteMulti',                    //批量删除
     adminUserStatusChange: path + '/adminUser/changeStatus',                  //改变系统用户状态
+    adminUserInfo: path + '/adminUser/getUserInfo',                           //获取管理员用户信息
     
     //role
     adminUserRoleList:path + '/adminUser/getRoleList',

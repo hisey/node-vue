@@ -4,6 +4,8 @@ export const getAdminUserList = fetch.get(`${adminPath}/adminUser/getList`)
 export const changeAdminUserStatus = fetch.post(`${adminPath}/adminUser/changeStatus`)
 export const delAdminUser = fetch.post(`${adminPath}/adminUser/delete`)
 export const addAdminUser = fetch.post(`${adminPath}/adminUser/add`)
+export const getAdminUserInfo = fetch.get(`${adminPath}/adminUser/getUserInfo`)
+
 
 //role
 export const getAdminRoleList = fetch.get(`${adminPath}/adminUser/getRoleList`)

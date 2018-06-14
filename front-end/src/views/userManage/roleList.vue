@@ -24,7 +24,7 @@
           <el-tag size="mini" :type="scope.row.status | tagFilter">{{scope.row.status | textFilter}}</el-tag>
         </template>
       </el-table-column>
-       <el-table-column label="角色描述" width="110" align="center">
+      <el-table-column label="角色描述" width="110" align="center">
         <template slot-scope="scope">
           {{scope.row.description}}
         </template>
@@ -32,9 +32,9 @@
       <el-table-column label="操作" width="310" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="addRole(scope.row.id,scope.row.name)">编辑</el-button>
-          <el-button size="mini" v-if="scope.row.status==0" @click="changeStatus(scope.row.id,1)">启用</el-button>
-          <el-button size="mini" type="warning" v-if="scope.row.status==1" @click="changeStatus(scope.row.id,0)">禁用</el-button>
-          <el-button size="mini" type="danger" @click="handDelete(scope.row.id)">删除</el-button>
+          <el-button size="mini" v-if="scope.row.status==0&&scope.row.id!=1" @click="changeStatus(scope.row.id,1)">启用</el-button>
+          <el-button size="mini" type="warning" v-if="scope.row.status==1&&scope.row.id!=1" @click="changeStatus(scope.row.id,0)">禁用</el-button>
+          <el-button size="mini" type="danger" v-if="scope.row.id!=1" @click="handDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

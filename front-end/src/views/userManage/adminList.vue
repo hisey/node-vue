@@ -31,10 +31,10 @@
       </el-table-column>
       <el-table-column label="操作" width="310" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="addAdminUser(scope.row.id)">编辑</el-button>
-          <el-button size="mini" v-if="scope.row.status==0" @click="changeStatus(scope.row.id,1,scope.row.role_id)">启用</el-button>
-          <el-button size="mini" type="warning" v-if="scope.row.status==1" @click="changeStatus(scope.row.id,0,scope.row.role_id)">禁用</el-button>
-          <el-button size="mini" type="danger" @click="handDelete(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="primary" @click="addAdminUser(scope.row.id,scope.row.user_name,scope.row.role_id)">编辑</el-button>
+          <el-button size="mini" v-if="scope.row.status==0&&scope.row.role_id!=1" @click="changeStatus(scope.row.id,1,scope.row.role_id)">启用</el-button>
+          <el-button size="mini" type="warning" v-if="scope.row.status==1&&scope.row.role_id!=1" @click="changeStatus(scope.row.id,0,scope.row.role_id)">禁用</el-button>
+          <el-button size="mini" type="danger" v-if="scope.row.role_id!=1" @click="handDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,9 +46,9 @@
         <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="role_id" :label-width="formLabelWidth">
+        <el-form-item label="角色" prop="role_id" v-if="form.id!=1" :label-width="formLabelWidth">
           <el-select v-model="form.role_id" placeholder="请选择角色">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+            <el-option v-for="item in options" v-if="item.id!=1" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -204,9 +204,17 @@ export default {
         });
       });
     },
-    addAdminUser(id) {
-      this.id = id;
+    // async getAdminUserInfo() {
+    //   let data = await getAdminUserInfo({
+    //     id: this.from.id
+    //   });
+
+    // },
+    addAdminUser(id, name, roleId) {
+      this.form.id = id;
       this.dialogFormVisible = true;
+      this.form.name = name;
+      this.form.role_id = roleId;
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {

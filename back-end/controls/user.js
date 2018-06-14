@@ -40,7 +40,7 @@ module.exports = {
     async addAdminUser(req, res) {
         let name = req.body.name;
         let pass = req.body.pass;
-        let role_id = req.body.role_id;
+        let role_id = req.body.roleId;
         let id = req.body.id;
         let sql = `SELECT name FROM admin_role WHERE id=${role_id}`;
         let query = '';
@@ -51,28 +51,29 @@ module.exports = {
             if (err) { console.log(err); }
             pass = hash;
             // let arr = [name, pass, role_id, role_name];
-            console.log("用户id为："+pass);
+            // console.log("用户id为："+pass);
             if (id) {
                 // query = `UPDATE admin_user SET user_name=${name}, password=${pass}, role_id=${role_id},role_name=${role_name}, update_time="" WHERE id=${id}`;
             } else {
                 query = `INSERT INTO admin_user(user_name, password, role_id , role_name) VALUES('${name}', '${pass}', '${role_id}','${role_name}')`;
             }
-            console.log(query)
+            // console.log(query)
             let data = await func.connPool(query)
             res.json({ code: 200, msg: 'done' });
         });
     },
-
-
+    // async adminUserInfo(req, res){
+    //     let data = await func.connPool(sql.queryAll, ["admin_user"]);
+    //     let         
+    // },
     // 删除用户
     async deleteAdminUser(req, res) {
-
         let id = req.body.id;
-
+        if (id == 1) {
+            res.json({ code: 0, msg: '超级管理员不可删除' });
+        }
         let data = await func.connPool(sql.del, ['admin_user', id])
         res.json({ code: 200, msg: 'done' });
-        // });
-
     },
 
     // 批量删除
@@ -91,7 +92,6 @@ module.exports = {
             res.json({ code: 400, msg: '用户名不存在' });
             return;
         }
-
         let password = data[0].password;
         bcrypt.compare(pass, password, (err, sure) => {
             if (sure) {
@@ -128,22 +128,20 @@ module.exports = {
     logout(req, res) {
         req.session.login = null;
 
-        res.json({ code: 200, msg: '注销' });
+        res.json({ code: 200, msg: '注销成功' });
     },
     async changeAdminUserStatus(req, res) {
         let id = req.body.id;
-        let role_id = req.body.role_id
+        let role_id = req.body.roleId;
         let status = req.body.status;
         let sql1 = `SELECT status FROM admin_role WHERE id = ${role_id}`
         let sql2 = `UPDATE admin_user SET status = ${status} WHERE id = ${id}`;
-        // console.log(data1);
         if (status == 1) {
-            // console.log(role_id);
             let data1 = await func.connPool(sql1)
             if (data1[0].status == 0) {
                 res.send({ code: 200, msg: "所属角色处于禁用状态，故该用户不可启用" });
+                return
             }
-            return
         }
         let data2 = await func.connPool(sql2)
         res.send({ code: 200, msg: sataus = status == 1 ? "已启用！" : "已禁用！" });
@@ -176,6 +174,9 @@ module.exports = {
     // 删除admin用户角色
     async deleteAdminUserRole(req, res) {
         let id = req.body.id;
+        if (id == 1) {
+            res.json({ code: 0, msg: '超级管理员不可删除' });
+        }
         let data1 = await func.connPool(sql.del, ['admin_role', id])
         let data2 = await func.connPool(`DELETE FROM admin_user WHERE role_id = ${id}`)
         res.send({ code: 200, msg: '成功删除！' });
@@ -184,6 +185,9 @@ module.exports = {
     async changeAdminRoleStatus(req, res) {
         let id = req.body.id;
         let status = req.body.status;
+        if (id == 1) {
+            res.json({ code: 0, msg: '超级管理员不可禁用' });
+        }
         let sql1 = `UPDATE admin_role SET status = ${req.body.status} WHERE id = ${id}`
         let sql2 = `UPDATE admin_user SET status = ${req.body.status} WHERE role_id = ${id}`
         let data1 = await func.connPool(sql1)

@@ -206,7 +206,7 @@ export default {
     if (this.id) {
       this.fecthDate(this.id)
     } else {
-      createEditor();
+      this.createEditor();
     }
   }
 };
