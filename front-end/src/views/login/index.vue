@@ -1,30 +1,30 @@
 <template>
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-      <h3 class="title">vue-element-admin</h3>
+      <h3 class="title">后台管理系统</h3>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-          placeholder="password"></el-input>
+          placeholder="请输入密码"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          Sign in
+          登录
         </el-button>
       </el-form-item>
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: root</span>
         <span> password: root</span>
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
@@ -53,13 +53,13 @@ export default {
     };
     return {
       loginForm: {
-        username: "root",
-        password: "root"
+        username: "",
+        password: ""
       },
       loginRules: {
         username: [
           // { required: true, trigger: "blur", validator: validateUsername }
-          { required: true, trigger: "blur" }
+          { required: true, trigger: "blur" ,message:"用户名不能为空"}
         ],
         password: [{ required: true, trigger: "blur", validator: validatePass }]
       },

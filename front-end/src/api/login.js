@@ -16,8 +16,8 @@ let adminPath = "/api/admin"
 //     pass
 //   })
 // }
-export const login = fetch.post(`${adminPath}/user/login`)
-export const logOut = fetch.post(`${adminPath}/user/logout`)
+export const login = fetch.post(`${adminPath}/adminUser/login`)
+export const logOut = fetch.post(`${adminPath}/adminUser/logout`)
 
 // export function getInfo(token) {
 //   return request({

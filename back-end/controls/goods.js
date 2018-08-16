@@ -54,7 +54,7 @@ module.exports = {
 
     //获取商品分类
     async fetchCategory(req, res) {
-        let id = req.body.id;
+        // let id = req.body.id;
         let data = await func.connPool(sql.queryAll, ["goods_category"])
         if (data) {
             let arr = data.filter(function (item) {

@@ -134,6 +134,33 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/userManage',
+    component: Layout,
+    redirect: '/userManage/adminList',
+    name: 'userManage',
+    meta: { title: '用户管理', icon: 'example' },
+    children: [
+      {
+        path: 'adminList',
+        name: 'adminList',
+        component: () => import('@/views/userManage/adminList'),
+        meta: { title: '系统用户', icon: 'table' }
+      },
+      // {
+      //   path: 'userList',
+      //   name: 'userList',
+      //   component: () => import('@/views/userManage/userList'),
+      //   meta: { title: '个人用户', icon: 'table' }
+      // },
+      {
+        path: 'roleList',
+        name: 'roleList',
+        component: () => import('@/views/userManage/roleList'),
+        meta: { title: '角色列表', icon: 'table' }
+      },
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
