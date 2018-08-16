@@ -10,8 +10,16 @@ module.exports = {
     async fetchList(req, res) {
         let curentPage = req.query.curentPage;
         let showCount = req.query.showCount;
-        if (curentPage == '' || curentPage == null || curentPage == undefined) {
-            res.json({ code: 102, msg: '请传入当前页码' });
+        try {
+            if (curentPage == '' || curentPage == null || curentPage == undefined) {
+                throw new Error('请传入当前页码')
+            }
+        } catch (err) {
+            console.log(err.message, err);
+            res.json({
+                code: 102,
+                msg: err.message
+            });
             return;
         }
         if (showCount == '' || showCount == null || showCount == undefined) {
@@ -31,9 +39,16 @@ module.exports = {
             data = await paging(res, sql, curentPage, showCount);
         }
         if (data) {
-            res.json({ code: 200, msg: 'done', data });
+            res.json({
+                code: 200,
+                msg: 'done',
+                data
+            });
         } else {
-            res.json({ code: -1, msg: '获取数据失败' });
+            res.json({
+                code: -1,
+                msg: '获取数据失败'
+            });
         }
     },
 
@@ -47,9 +62,16 @@ module.exports = {
                 item.update_time = new Date(item.update_time).toLocaleString()
                 return item;
             });
-            res.json({ code: 200, msg: 'done', data: arr });
+            res.json({
+                code: 200,
+                msg: 'done',
+                data: arr
+            });
         } else {
-            res.json({ code: -1, msg: '获取数据失败' });
+            res.json({
+                code: -1,
+                msg: '获取数据失败'
+            });
         }
     },
 
@@ -64,7 +86,11 @@ module.exports = {
         //console.log(sql.queryById)
         // console.log(data)
         data.imgs = data.imgs == 0 ? "" : data.imgs
-        res.json({ code: 200, msg: 'done', goods: data });
+        res.json({
+            code: 200,
+            msg: 'done',
+            goods: data
+        });
     },
 
     // 添加|更新 商品
@@ -88,14 +114,20 @@ module.exports = {
         let categoryId = req.body.id;
         let sql = `UPDATE goods SET category_name=${categoryName} WHERE category_id=${categoryId}`
         let data = await func.connPool(sql)
-        res.send({ code: 200, msg: 'done' });
+        res.send({
+            code: 200,
+            msg: 'done'
+        });
     },
 
     // 删除商品
     async deleteGoods(req, res) {
         let id = req.body.id;
         let data = await func.connPool(sql.del, ['goods', id])
-        res.send({ code: 200, msg: '成功删除！' });
+        res.send({
+            code: 200,
+            msg: '成功删除！'
+        });
     },
 
     // 删除商品分类
@@ -103,14 +135,20 @@ module.exports = {
         let id = req.body.id;
         let data1 = await func.connPool(sql.del, ['goods_category', id])
         let data2 = await func.connPool(`DELETE FROM goods WHERE category_id = ${id}`)
-        res.send({ code: 200, msg: '成功删除！' });
+        res.send({
+            code: 200,
+            msg: '成功删除！'
+        });
     },
 
     // 批量删除
     async deleteMulti(req, res) {
         let id = req.body.id;
         let data = await func.connPool(`DELETE FROM goods WHERE id IN (${id})`)
-        res.send({ code: 200, msg: '成功删除！' });
+        res.send({
+            code: 200,
+            msg: '成功删除！'
+        });
     },
 
 
@@ -123,11 +161,17 @@ module.exports = {
         let sql2 = `UPDATE goods SET shelf = ${shelf} WHERE id = ${id}`;
         let data1 = await func.connPool(sql1)
         if (shelf == 1 && data1[0].shelf == 0) {
-            res.send({ code: 200, msg: "所属分类处于下架状态，故该商品不可上架" });
+            res.send({
+                code: 200,
+                msg: "所属分类处于下架状态，故该商品不可上架"
+            });
             return
         }
         let data2 = await func.connPool(sql2)
-        res.send({ code: 200, msg: shelf = shelf == 1 ? "已上架！" : "已下架！" });
+        res.send({
+            code: 200,
+            msg: shelf = shelf == 1 ? "已上架！" : "已下架！"
+        });
     },
     async shelfCategory(req, res) {
         let id = req.body.id;
@@ -136,6 +180,9 @@ module.exports = {
         let sql2 = `UPDATE goods SET shelf = ${req.body.shelf} WHERE category_id = ${id}`
         let data1 = await func.connPool(sql1)
         let data2 = await func.connPool(sql2)
-        res.send({ code: 200, msg: shelf = shelf == 1 ? "已上架！" : "已下架！" });
+        res.send({
+            code: 200,
+            msg: shelf = shelf == 1 ? "已上架！" : "已下架！"
+        });
     }
 };
